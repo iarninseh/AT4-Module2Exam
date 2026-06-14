@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 600px;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Add a map outline centered on the query location (Pasong Putik Proper).
+        const map = L.map('map').setView([14.73, 121.06], 13);
+
+        // Add OpenStreetMap tile layer for visual context
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Add a marker for the specific location within Pasong Putik Proper.
+        L.marker([14.7399741, 121.0694429])
+            .addTo(map)
+            .bindPopup('Blk 17 Lot 4, Romans St. corner Palau St.<br>Sacred Heart Village, Pasong Putik, Quezon City')
+            .openPopup();
+
+        // Load the GeoJSON data and add it to the map.
+        fetch('export.geojson')
+            .then(res => res.json())
+            .then(data => {
+                const layer = L.geoJSON(data, {
+                    // Set CSS styling for the GeoJSON layer to make it visually distinct.
+                    style: {
+                        color: 'red',
+                        weight: 2,
+                        fillOpacity: 0.1
+                    }
+                }).addTo(map);
+                map.fitBounds(layer.getBounds());
+            });
+    </script>
+</body>
+
+</html>
