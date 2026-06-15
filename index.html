@@ -54,7 +54,15 @@
 
         //Information of 14.7399741, 121.0694429
         //Marker for both Tooltip and Popup
-        const houseMarker = L.marker([14.7399741, 121.0694429]).addTo(map);
+        const customIcon = L.icon({
+            iconUrl: 'assets/red marker.png', // Path to your custom icon image
+            iconSize: [32, 32],
+            iconAnchor: [16, 32],
+            popupAnchor: [0, -32]
+        });
+
+        const houseMarker = L.marker([14.7399741, 121.0694429], { icon: customIcon })
+        .addTo(map);
 
         // Bind the Tooltip (shows on hover)
         houseMarker.bindTooltip(
