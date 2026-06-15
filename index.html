@@ -26,25 +26,6 @@
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
 
-        //Define the OpenWeatherMap Rain Layer
-        const openWeatherApiKey = 'f4969180f5a7d4fa1985ffb93d658bb7';
-        const rainLayer = L.tileLayer(`https://openweathermap.org{z}/{x}/{y}.png?appid=${openWeatherApiKey}`, {
-            attribution: '© OpenWeatherMap',
-            opacity: 0.6
-        });
-
-        //Define the control objects
-        const baseMaps = {
-            "Weather": osmLayer
-        };
-
-        const overlayMaps = {
-            "Rain Layer": rainLayer
-        };
-
-        //Add the layers control UI to the map
-        L.control.layers(baseMaps, overlayMaps, { collapsed: false }).addTo(map);
-
     //Information of 14.7399741, 121.0694429
         //Marker for both Tooltip and Popup
         const houseMarker = L.marker([14.7399741, 121.0694429]).addTo(map);
