@@ -21,6 +21,9 @@
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
     
     <script>
+        // Counter to generate unique IDs for marker checkboxes
+        let markerCount = 0;
+
         //Initialize map view
         const map = L.map('map').setView([14.73, 121.06], 13);
 
@@ -52,7 +55,6 @@
             });
         }
 
-        //Information of 14.7399741, 121.0694429
         //Marker for both Tooltip and Popup
         const customIcon = L.icon({
             iconUrl: 'assets/red marker.png', // Path to your custom icon image
@@ -61,45 +63,61 @@
             popupAnchor: [0, -32]
         });
 
-        const houseMarker = L.marker([14.7399741, 121.0694429], { icon: customIcon })
-        .addTo(map);
+        // Define the markers with their coordinates and house information
+        markers = [{
+            coords: [14.7399741, 121.0694429],
+            houseInfo: "House Information<br>Address: Block 17 Lot 4, Romans St. Corner Palau St., Sacred Heart Village, Pasong Putik, Quezon City<br>Lot Size: 326 sqm<br>House Size: 210 sqm<br>Number of Residents: 6 (Adult: 6 Child: 0)"
+        }, {
+            coords: [14.7373541, 121.0682915],
+            houseInfo: "House Information<br>Address: Sacred Heart Village, 6A St Andrew, Pasong Putik, Novaliches, Quezon City<br>Lot Size: -- sqm<br>House Size: -- sqm<br>Number of Residents: -- (Adult: -- Child: --)"
+        }];
 
-        // Bind the Tooltip (shows on hover)
-        houseMarker.bindTooltip(
-            "House Information<br>Address: Block 17 Lot 4, Romans St. Corner Palau St., Sacred Heart Village, Pasong Putik, Quezon City<br>Lot Size: 326 sqm<br>House Size: 210 sqm<br>Number of Residents: 6 (Adult: 6 Child: 0)"
-        );
+        // Loop through the markers array and add each marker to the map
+        for (let i = 0; i < markers.length; i++) {
+            addMarker(markers[i].coords, markers[i].houseInfo);
+        }
 
-        // Bind the Popup (shows on click)
-        houseMarker.bindPopup(`
-            <div style="font-family: Arial, sans-serif; padding: 5px; min-width: 200px;">
-                <h4 style="margin: 0 0 8px 0;">Inspection Tasks</h4>
-                <label style="display: block; margin: 6px 0; cursor: pointer;">
-                    <input type="checkbox" id="task-resident-count" onchange="saveTaskState(this)"> Verify resident count (6)
-                </label>
-                <label style="display: block; margin: 6px 0; cursor: pointer;">
-                    <input type="checkbox" id="task-vax-card" onchange="saveTaskState(this)"> Request for vaccination card/s
-                </label>
-                <label style="display: block; margin: 6px 0; cursor: pointer;">
-                    <input type="checkbox" id="task-safety-notice" onchange="saveTaskState(this)"> Deliver safety notice
-                </label>
-            </div>
-        `);
-
-function saveTaskState(checkbox) {
+        // Function to save the state of the checkboxes in localStorage
+        function saveTaskState(checkbox) {
             localStorage.setItem(checkbox.id, checkbox.checked);
         }
 
         // Event listener that runs every time the popup opens to reload saved states
-        houseMarker.on('popupopen', function() {
-            const taskIds = ['task-resident-count', 'task-vax-card', 'task-safety-notice'];
-            
-            taskIds.forEach(id => {
-                const checkbox = document.getElementById(id);
-                if (checkbox) {
-                    checkbox.checked = localStorage.getItem(id) === 'true';
-                }
+        function setupTaskRestore(marker, taskIds) {
+            marker.on('popupopen', function() {
+                taskIds.forEach(id => {
+                    const checkbox = document.getElementById(id);
+                    if (checkbox) {
+                        checkbox.checked = localStorage.getItem(id) === 'true';
+                    }
+                });
             });
-        });
+        }
+
+        // Function to add a marker with a tooltip and popup containing inspection tasks
+        function addMarker(coords, houseInfo) {
+            markerCount++;
+            const marker = L.marker(coords, { icon: customIcon }).addTo(map);
+
+            marker.bindTooltip(houseInfo);
+
+            marker.bindPopup(`
+                <div style="font-family: Arial, sans-serif; padding: 5px; min-width: 200px;">
+                    <h4 style="margin: 0 0 8px 0;">Inspection Tasks</h4>
+                    <label style="display: block; margin: 6px 0; cursor: pointer;">
+                        <input type="checkbox" id="task${markerCount}-resident-count" onchange="saveTaskState(this)"> Verify resident count
+                    </label>
+                    <label style="display: block; margin: 6px 0; cursor: pointer;">
+                        <input type="checkbox" id="task${markerCount}-vax-card" onchange="saveTaskState(this)"> Request for vaccination card/s
+                    </label>
+                    <label style="display: block; margin: 6px 0; cursor: pointer;">
+                        <input type="checkbox" id="task${markerCount}-safety-notice" onchange="saveTaskState(this)"> Deliver safety notice
+                    </label>
+                </div>`);
+            
+            setupTaskRestore(marker, [`task${markerCount}-resident-count`, `task${markerCount}-vax-card`, `task${markerCount}-safety-notice`]);
+            return marker;
+        }
         
         // Load the GeoJSON data and add it to the map.
         fetch('export.geojson')
