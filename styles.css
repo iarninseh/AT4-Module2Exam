@@ -17,7 +17,7 @@
     font-size: 18px;
     padding: 10px;
     left: 50%;
-    top: 900px;
+    top: 70%;
     z-index: 1000;
     filter: drop-shadow(2px 2px 2px rgb(0, 0, 0));
 }
