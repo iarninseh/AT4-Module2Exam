@@ -1,25 +1,39 @@
 #title {
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    text-shadow:2px 2px #01092a;
     color: white;
-    background-color: black;
+    background-color: #0044ff;
     text-align: center;
+    padding: 10px;
+
+
 }
 
 #map {
     height: 900px;
     width: 100%;
+
+    border-color: #0044ff;
+    border-radius: 2%;
+    border-style: groove;
 }
 
 #end-button {
-    display: none;
     position: fixed;
     transform: translateX(-50%);
     font-size: 18px;
     padding: 10px;
     left: 50%;
-    top: 70%;
+    top: 90%;
     z-index: 1000;
-    filter: drop-shadow(2px 2px 2px rgb(0, 0, 0));
+    
+    color:#ffffff;
+    background-color: #0044ff;
+    filter: drop-shadow(2px 2px 2px rgb(1, 9, 42));
+    cursor: pointer;
+    font-weight: bold;
+
+    
 }
 
 #routing-info {
@@ -30,7 +44,7 @@
     background: rgb(255, 255, 255);
     padding: 15px;
     border-radius: 8px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 15px rgb(1, 9, 42);
     font-family: Arial, sans-serif;
     display: none;
     /* Hidden until a route is generated */

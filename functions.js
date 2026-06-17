@@ -126,8 +126,6 @@ function addMarker(coords, houseInfo, id) {
  
     return marker;
 }
- 
- 
 // ── EVENT LISTENERS ────────────────────────────────────────────────────────────
  
 routingControl.on('routesfound', function(e) {
@@ -182,7 +180,7 @@ if (searchInput) {
  
 L.marker(satelliteOfficeCoords, { icon: officeIcon })
     .addTo(map)
-    .bindPopup("<b>Barangay Satellite Office</b><br>Sampaguita St. (Tapat ng Station 16, likod ng Fairview Terraces)");
+    .bindPopup("<b>Barangay Satellite Office</b><br>Sampaguita St. (Across Station 16, at the back of Fairview Terraces)");
  
 for (let i = 0; i < markers.length; i++) {
     addMarker(markers[i].coords, markers[i].houseInfo, markers[i].id);
