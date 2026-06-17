@@ -25,8 +25,12 @@ const map = L.map('map').setView([14.735, 121.060], 15);
 const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors'
 }).addTo(map);
- 
- 
+
+const floodLayer = L.esri.dynamicMapLayer({
+    url:'https://ulap-hazards.georisk.gov.ph/arcgis/rest/services/MGBPublic/Flood/MapServer',
+    layers:[0],
+    opacity:0.6,
+}).addTo(map);
 // ── ICONS ──────────────────────────────────────────────────────────────────────
  
 const officeIcon = L.icon({
@@ -77,6 +81,7 @@ function endRouting() {
     document.querySelector('.leaflet-routing-container').style.display = 'none';
     routingControl.setWaypoints([]);
     document.getElementById('end-button').style.display = 'none';
+    document.getElementById('routing-info').style.display ='none';
 }
  
 function saveTaskState(checkbox) {

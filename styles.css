@@ -1,10 +1,10 @@
 #title {
+    padding: 10px;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     text-shadow:2px 2px #01092a;
+    text-align: center;
     color: white;
     background-color: #0044ff;
-    text-align: center;
-    padding: 10px;
 
 
 }
@@ -14,11 +14,12 @@
     width: 100%;
 
     border-color: #0044ff;
-    border-radius: 2%;
+    border-radius: 10px;
     border-style: groove;
 }
 
 #end-button {
+    display: none;
     position: fixed;
     transform: translateX(-50%);
     font-size: 18px;
@@ -48,4 +49,8 @@
     font-family: Arial, sans-serif;
     display: none;
     /* Hidden until a route is generated */
+}
+
+.leaflet-control-geocoder {
+    background-color: #e1e9ff;
 }
