@@ -105,7 +105,6 @@ function setupTaskRestore(marker, taskIds) {
 function addMarker(coords, houseInfo, id) {
     const taskIDs = [
         `${id}-resident-count`,
-        `${id}-vax-card`,
         `${id}-safety-notice`
     ]
     const marker = L.marker(coords, { icon: customIcon }).addTo(map);
@@ -119,10 +118,7 @@ function addMarker(coords, houseInfo, id) {
                 <input type="checkbox" id="${taskIDs[0]}" onchange="saveTaskState(this)"> Verify resident count
             </label>
             <label style="display: block; margin: 6px 0; cursor: pointer;">
-                <input type="checkbox" id="${taskIDs[1]}" onchange="saveTaskState(this)"> Request for vaccination card/s
-            </label>
-            <label style="display: block; margin: 6px 0; cursor: pointer;">
-                <input type="checkbox" id="${taskIDs[2]}" onchange="saveTaskState(this)"> Deliver safety notice
+                <input type="checkbox" id="${taskIDs[1]}" onchange="saveTaskState(this)"> Deliver safety notice
             </label>
         </div>`);
  
