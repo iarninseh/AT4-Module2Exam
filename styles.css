@@ -10,17 +10,18 @@
 }
 
 #map {
-    height: 900px;
+    height: 590px;
     width: 100%;
 
     border-color: #0044ff;
     border-radius: 10px;
     border-style: groove;
 }
+
 #button-container {
     position: fixed;
     transform: translateY(-70px);
-    width: 100%;
+    width: calc(100% - 10px);
     display: flex;
     justify-content: center;
     gap: 20px;
