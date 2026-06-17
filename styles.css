@@ -17,24 +17,31 @@
     border-radius: 10px;
     border-style: groove;
 }
-
-#end-button {
-    display: none;
+#button-container {
     position: fixed;
-    transform: translateX(-50%);
+    transform: translateY(-70px);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    z-index: 1000;
+
+}
+
+.map-button {
     font-size: 18px;
     padding: 10px;
     left: 50%;
-    top: 90%;
-    z-index: 1000;
     
     color:#ffffff;
     background-color: #0044ff;
     filter: drop-shadow(2px 2px 2px rgb(1, 9, 42));
     cursor: pointer;
     font-weight: bold;
+}
 
-    
+#end-button {
+    display: none;
 }
 
 #routing-info {

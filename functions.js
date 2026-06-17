@@ -30,6 +30,9 @@ const floodLayer = L.esri.dynamicMapLayer({
     url:'https://ulap-hazards.georisk.gov.ph/arcgis/rest/services/MGBPublic/Flood/MapServer',
     layers:[0],
     opacity:0.6,
+    disableKeepLevels: true,
+    updateInterval: 250,
+    useCors: true
 }).addTo(map);
 // ── ICONS ──────────────────────────────────────────────────────────────────────
  
@@ -131,6 +134,15 @@ function addMarker(coords, houseInfo, id) {
  
     return marker;
 }
+
+function toggleFloodLayer() {
+    if(map.hasLayer(floodLayer)) {
+        map.removeLayer(floodLayer);
+    } else {
+        map.addLayer(floodLayer);
+    }
+}
+
 // ── EVENT LISTENERS ────────────────────────────────────────────────────────────
  
 routingControl.on('routesfound', function(e) {
