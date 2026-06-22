@@ -104,6 +104,7 @@ const floodLayer = L.esri.dynamicMapLayer({
     useCors: true
 }).addTo(map);
 
+
 var legend = L.control({ position: 'bottomleft' });
 
 legend.onAdd = function (map) {
@@ -144,19 +145,20 @@ const geocoderControl = L.Control.geocoder({
 // ── FUNCTIONS ──────────────────────────────────────────────────────────────────
  
 function addRoutingMarker(coords) {
-    if (!routingMarkers.includes(coords)) routingMarkers.push(coords);
+    
+    if ((!routingMarkers.includes(coords)) && routingMarkers.length < 2) routingMarkers.push(coords);
+
     if (routingMarkers.length == 2) {
         routingControl.setWaypoints([
             L.latLng(routingMarkers[0]),
             L.latLng(routingMarkers[1])
         ]);
-        routingMarkers = []
     }
-    console.log(routingMarkers)
 }
  
 function endRouting() {
     document.querySelector('.leaflet-routing-container').style.display = 'none';
+    routingMarkers = [];
     routingControl.setWaypoints([]);
     document.getElementById('end-button').style.display = 'none';
     document.getElementById('routing-info').style.display ='none';
@@ -255,7 +257,7 @@ geocoderControl.on('markgeocode', function(e) {
         .openPopup();
  
     map.setView(geocodeResult.center, 16);
-    markingRouters = [];
+    routingMarkers = [];
     
     addRoutingMarker(geocodeResult.center);
     addRoutingMarker(satelliteOfficeCoords)
@@ -278,10 +280,14 @@ if (searchInput) {
  
 // ── MARKERS ────────────────────────────────────────────────────────────────────
  
-L.marker(satelliteOfficeCoords, { icon: markerTypes.office.icon })
+const satelliteOffice = L.marker(satelliteOfficeCoords, { icon: markerTypes.office.icon })
     .addTo(map)
     .bindPopup("<b>Barangay Satellite Office</b><br>Sampaguita St. (Across Station 16, at the back of Fairview Terraces)");
  
+satelliteOffice.on('click', function() {
+        addRoutingMarker(satelliteOfficeCoords);
+    });
+
 for (let i = 0; i < markers.length; i++) {
     addMarker(markers[i].type, markers[i].coords, markers[i].info, markers[i].id);
 }
@@ -303,3 +309,18 @@ fetch('export.geojson')
     })
     .catch(err => console.log("GeoJSON layout configuration payload skipped. Continuing runtime render layer setup."));
  
+/*
+fetch('mrt.geojson')
+    .then(res => res.json())
+    .then(data => {
+        const layer = L.geoJSON(data, {
+            style: {
+                color: 'blue',
+                weight: 6,
+                fillOpacity: 0
+            }
+        }).addTo(map);
+        map.fitBounds(layer.getBounds());
+    })
+    .catch(err => console.log("GeoJSON layout configuration payload skipped. Continuing runtime render layer setup."));
+*/

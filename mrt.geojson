@@ -1,0 +1,33 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "name": "MRT-7 Line" },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+
+        ]
+      }
+    },
+    { "type": "Feature", "properties": { "name": "North Avenue", "terminus": true }, "geometry": { "type": "Point", "coordinates": [121.0324, 14.6522] } },
+    { "type": "Feature", "properties": { "name": "Quezon Memorial Circle" }, "geometry": { "type": "Point", "coordinates": [121.0499, 14.6506] } },
+    { "type": "Feature", "properties": { "name": "University Avenue" }, "geometry": { "type": "Point", "coordinates": [121.0614, 14.6556] } },
+    { "type": "Feature", "properties": { "name": "Tandang Sora" }, "geometry": { "type": "Point", "coordinates": [121.0742, 14.6693] } },
+    { "type": "Feature", "properties": { "name": "Don Antonio" }, "geometry": { "type": "Point", "coordinates": [121.0858, 14.6879] } },
+    { "type": "Feature", "properties": { "name": "Batasan" }, "geometry": { "type": "Point", "coordinates": [121.0958, 14.6992] } },
+    { "type": "Feature", "properties": { "name": "Manggahan" }, "geometry": { "type": "Point", "coordinates": [121.0997, 14.7078] } },
+    { "type": "Feature", "properties": { "name": "Doña Carmen" }, "geometry": { "type": "Point", "coordinates": [121.1033, 14.7163] } },
+    { "type": "Feature", "properties": { "name": "Regalado" }, "geometry": { "type": "Point", "coordinates": [121.1059, 14.7258] } },
+    { "type": "Feature", "properties": { "name": "Mindanao Avenue" }, "geometry": { "type": "Point", "coordinates": [121.0997, 14.7337] } },
+    {
+      "type": "Feature",
+      "properties": { "name": "Quirino", "locality": "Pasong Putik", "highlight": true },
+      "geometry": { "type": "Point", "coordinates": [121.0878, 14.7453] }
+    },
+    { "type": "Feature", "properties": { "name": "Sacred Heart" }, "geometry": { "type": "Point", "coordinates": [121.0817, 14.7595] } },
+    { "type": "Feature", "properties": { "name": "Tala" }, "geometry": { "type": "Point", "coordinates": [121.0757, 14.7742] } },
+    { "type": "Feature", "properties": { "name": "San Jose del Monte", "terminus": true }, "geometry": { "type": "Point", "coordinates": [121.0448, 14.8138] } }
+  ]
+}
