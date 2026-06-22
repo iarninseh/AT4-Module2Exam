@@ -62,3 +62,23 @@
 .leaflet-control-geocoder {
     background-color: #e1e9ff;
 }
+
+.legend {
+  background: white;
+  padding: 10px 12px;
+  border-radius: 6px;
+  box-shadow: 0 0 6px rgba(0,0,0,0.3);
+  font: 13px/1.6 sans-serif;
+  color: #333;
+}
+
+.legend strong { display: block; margin-bottom: 4px; }
+
+.legend i {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 6px;
+  vertical-align: middle;
+}

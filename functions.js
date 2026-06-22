@@ -1,21 +1,90 @@
 // ── STATE & CONFIGURATION ─────────────────────────────────────────────────────────────
  
 let markerCount = 0;
- 
+let  routingMarkers = []
 const satelliteOfficeCoords = [14.7385201, 121.0602773];
- 
 const markers = [
     {
         id: "marker1",
+        type: "house",
         coords: [14.7399741, 121.0694429],
-        houseInfo: "House Information<br>Address: Block 17 Lot 4, Romans St. Corner Palau St., Sacred Heart Village, Pasong Putik, Novaliches, Quezon City<br>Lot Size: 326 sqm<br>House Size: 210 sqm<br>Number of Residents: 6 (Adult: 6 Child: 0)"
+        info: "House Information<br>Address: Block 17 Lot 4, Romans St. Corner Palau St., Sacred Heart Village<br>Lot Size: 326 sqm<br>House Size: 210 sqm<br>Number of Residents: 6 (Adult: 6 Child: 0)"
     },
     {
         id: "marker2",
+        type: "house",
         coords: [14.7373541, 121.0682915],
-        houseInfo: "House Information<br>Address: 6A St Andrew, Sacred Heart Village, Pasong Putik, Novaliches, Quezon City<br>Lot Size: -- sqm<br>House Size: -- sqm<br>Number of Residents: -- (Adult: -- Child: --)"
+        info: "House Information<br>Address: 6A St Andrew, Sacred Heart Village<br>Lot Size: -- sqm<br>House Size: -- sqm<br>Number of Residents: -- (Adult: -- Child: --)"
+    },
+
+    {
+        id: "evacMarker1",
+        type: "evacCenter",
+        coords: [14.7415, 121.0578],
+        info: "Evacuation Center Information<br>Address: Champaca Covered Court, Champaca St., Maligaya Park Subd."
+    },
+    {
+        id: "evacMarker2",
+        type: "evacCenter",
+        coords: [14.7164, 121.0302],
+        info: "Evacuation Center Information<br>Address: Vargas Multi-Purpose Hall, Narra St."
+    },
+    {
+        id: "evacMarker3",
+        type: "evacCenter",
+        coords: [14.7386, 121.0590],
+        info: "Evacuation Center Information<br>Address: Feliciano Covered Court, Maligaya Park Subd." 
     }
 ];
+ 
+
+// ── ICONS ──────────────────────────────────────────────────────────────────────
+ 
+const markerTypes = {
+    house: {
+        name: "House",
+        icon: L.icon({
+            iconUrl: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png',
+            iconSize: [32, 32],
+            iconAnchor: [16, 32],
+            popupAnchor: [0, -32]
+        }),
+        image: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png'
+    },
+    evacCenter: {
+        name: "Evacuation Center",
+        icon: L.icon({
+            iconUrl: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png',
+            iconSize: [32, 32],
+            iconAnchor: [16, 32],
+            popupAnchor: [0, -32]
+        }),
+        image: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png'
+    },
+
+    office:  {
+        name: "Satellite Office",
+        icon: L.icon({
+            iconUrl: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+            iconSize: [32, 32],
+            iconAnchor: [16, 32],
+            popupAnchor: [0, -32]
+        }),
+        image: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+    },
+    hospital: {
+        name: "Hospital",
+        image: 'assets/hospital.svg.png'
+    },
+    police: {
+        name: "Police Station",
+        image: 'assets/policeStation.svg.png'
+    },
+    fire: {
+        name: "Fire Station",
+        image: 'assets/fireStation.svg.png'
+    }
+};
  
  
 // ── MAP & LAYERS ───────────────────────────────────────────────────────────────
@@ -34,23 +103,24 @@ const floodLayer = L.esri.dynamicMapLayer({
     updateInterval: 250,
     useCors: true
 }).addTo(map);
-// ── ICONS ──────────────────────────────────────────────────────────────────────
- 
-const officeIcon = L.icon({
-    iconUrl: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-    iconSize: [32, 32],
-    iconAnchor: [16, 32],
-    popupAnchor: [0, -32]
-});
- 
-const customIcon = L.icon({
-    iconUrl: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png',
-    iconSize: [32, 32],
-    iconAnchor: [16, 32],
-    popupAnchor: [0, -32]
-});
- 
- 
+
+var legend = L.control({ position: 'bottomleft' });
+
+legend.onAdd = function (map) {
+    var div = L.DomUtil.create('div', 'info legend');
+
+    var html = '<strong>Legend</strong>';
+    
+    for (var key in markerTypes) {
+        html += `<img style="height:16px; width:16px; margin-right: 4px; " src="${markerTypes[key].image}"></img>` + markerTypes[key].name + '<br>';
+    }
+
+    div.innerHTML = html;
+    return div;
+};
+
+legend.addTo(map);
+
 // ── CONTROLLERS ───────────────────────────────────────────────────────────────────
  
 const routingControl = L.Routing.control({
@@ -73,11 +143,16 @@ const geocoderControl = L.Control.geocoder({
  
 // ── FUNCTIONS ──────────────────────────────────────────────────────────────────
  
-function updateRouteTo(targetLatLng) {
-    routingControl.setWaypoints([
-        L.latLng(satelliteOfficeCoords),
-        L.latLng(targetLatLng)
-    ]);
+function addRoutingMarker(coords) {
+    if (!routingMarkers.includes(coords)) routingMarkers.push(coords);
+    if (routingMarkers.length == 2) {
+        routingControl.setWaypoints([
+            L.latLng(routingMarkers[0]),
+            L.latLng(routingMarkers[1])
+        ]);
+        routingMarkers = []
+    }
+    console.log(routingMarkers)
 }
  
 function endRouting() {
@@ -102,32 +177,41 @@ function setupTaskRestore(marker, taskIds) {
     });
 }
  
-function addMarker(coords, houseInfo, id) {
-    const taskIDs = [
-        `${id}-resident-count`,
-        `${id}-safety-notice`
-    ]
-    const marker = L.marker(coords, { icon: customIcon }).addTo(map);
- 
-    marker.bindTooltip(houseInfo);
- 
-    marker.bindPopup(`
-        <div style="font-family: Arial, sans-serif; padding: 5px; min-width: 200px;">
-            <h4 style="margin: 0 0 8px 0;">Inspection Tasks</h4>
-            <label style="display: block; margin: 6px 0; cursor: pointer;">
-                <input type="checkbox" id="${taskIDs[0]}" onchange="saveTaskState(this)"> Verify resident count
-            </label>
-            <label style="display: block; margin: 6px 0; cursor: pointer;">
-                <input type="checkbox" id="${taskIDs[1]}" onchange="saveTaskState(this)"> Deliver safety notice
-            </label>
-        </div>`);
- 
+function addMarker(type, coords, info, id) {
+    marker = L.marker(coords, { icon: markerTypes[type].icon }).addTo(map);
+
+    switch (type) {
+        case "house":
+            const taskIDs = [
+                `${id}-resident-count`,
+                `${id}-safety-notice`
+            ]
+        
+            marker.bindPopup(`
+                <div style="font-family: Arial, sans-serif; padding: 5px; min-width: 200px;">
+                    <h4 style="margin: 0 0 8px 0;">Inspection Tasks</h4>
+                    <label style="display: block; margin: 6px 0; cursor: pointer;">
+                        <input type="checkbox" id="${taskIDs[0]}" onchange="saveTaskState(this)"> Verify resident count
+                    </label>
+                    <label style="display: block; margin: 6px 0; cursor: pointer;">
+                        <input type="checkbox" id="${taskIDs[1]}" onchange="saveTaskState(this)"> Deliver safety notice
+                    </label>
+                </div>`);
+        
+            setupTaskRestore(marker, taskIDs);
+        
+            break;
+
+        case "evacCenter":
+            break;
+    }
+
+    marker.bindTooltip(info);
+
     marker.on('click', function() {
-        updateRouteTo(coords);
+        addRoutingMarker(coords);
     });
- 
-    setupTaskRestore(marker, taskIDs);
- 
+    
     return marker;
 }
 
@@ -171,7 +255,10 @@ geocoderControl.on('markgeocode', function(e) {
         .openPopup();
  
     map.setView(geocodeResult.center, 16);
-    updateRouteTo(geocodeResult.center);
+    markingRouters = [];
+    
+    addRoutingMarker(geocodeResult.center);
+    addRoutingMarker(satelliteOfficeCoords)
 });
  
 const searchInput = document.querySelector('.leaflet-control-geocoder-form input');
@@ -191,12 +278,12 @@ if (searchInput) {
  
 // ── MARKERS ────────────────────────────────────────────────────────────────────
  
-L.marker(satelliteOfficeCoords, { icon: officeIcon })
+L.marker(satelliteOfficeCoords, { icon: markerTypes.office.icon })
     .addTo(map)
     .bindPopup("<b>Barangay Satellite Office</b><br>Sampaguita St. (Across Station 16, at the back of Fairview Terraces)");
  
 for (let i = 0; i < markers.length; i++) {
-    addMarker(markers[i].coords, markers[i].houseInfo, markers[i].id);
+    addMarker(markers[i].type, markers[i].coords, markers[i].info, markers[i].id);
 }
  
  
