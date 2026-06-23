@@ -83,6 +83,10 @@ const markerTypes = {
     fire: {
         name: "Fire Station",
         image: 'assets/fireStation.svg.png'
+    },
+    train: {
+        name: "Train Station",
+        image: 'assets/trainStation.png'
     }
 };
  
@@ -331,10 +335,20 @@ fetch('mrt.geojson')
     .then(data => {
         const layer = L.geoJSON(data, {
             style: {
-                color: 'blue',
-                weight: 6,
+                color: '#808080',
+                weight: 3,
                 fillOpacity: 0
-            }
+            },
+        pointToLayer: function (feature, latlng) {
+            return L.marker(latlng, {
+                icon: L.icon({
+                    iconUrl: 'assets/trainStation.png',
+                    iconAnchor: [12, 12],
+                    popupAnchor: [0, -12],
+                    iconSize: [24, 24]
+                })
+            })
+        }
         }).addTo(map);
         map.fitBounds(layer.getBounds());
     })

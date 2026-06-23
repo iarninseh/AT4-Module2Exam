@@ -8,7 +8,20 @@
       "geometry": {
         "type": "LineString",
         "coordinates": [
-
+          [121.03233, 14.65217],
+          [121.04771, 14.65224],
+          [121.05454, 14.65491],
+          [121.06744, 14.66334],
+          [121.08265, 14.67692],
+          [121.08632, 14.68506],
+          [121.08733, 14.69729],
+          [121.07828, 14.70502],
+          [121.06802, 14.70649],
+          [121.06119, 14.73291],
+          [121.06686, 14.73544],
+          [121.08397, 14.75051],
+          [121.07940, 14.76999],
+          [121.07517, 14.78397]
         ]
       }
     },
@@ -32,6 +45,129 @@
         "type": "Point",
         "coordinates": [121.04771, 14.65224]
       }
+    }, {
+      "type": "Feature",
+      "properties": {
+        "name": "University Avenue",
+        "terminus": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [121.05454, 14.65491]
+      }
+    }, {
+      "type": "Feature",
+      "properties": {
+        "name": "Tandang Sora",
+        "terminus": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [121.06744, 14.66334]
+      }
+    }, {
+      "type": "Feature",
+      "properties": {
+        "name": "Don Antonio",
+        "terminus": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [121.08265, 14.67692]
+      }
+    }, {
+      "type": "Feature",
+      "properties": {
+        "name": "Batasan",
+        "terminus": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [121.08632, 14.68506]
+      }
+    }, {
+      "type": "Feature",
+      "properties": {
+        "name": "Manggahan",
+        "terminus": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [121.08733, 14.69729]
+      }
+    }, {
+      "type": "Feature",
+      "properties": {
+        "name": "Doña Carmen",
+        "terminus": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [121.07828, 14.70502]
+      }
+    }, {
+      "type": "Feature",
+      "properties": {
+        "name": "Regalado",
+        "terminus": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [121.06802, 14.70649]
+      }
+    }, {
+      "type": "Feature",
+      "properties": {
+        "name": "Mindanao Avenue",
+        "terminus": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [121.06119, 14.73291]
+      }
+    }, {
+      "type": "Feature",
+      "properties": {
+        "name": "Quirino",
+        "terminus": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [121.06686, 14.73544]
+      }
+    }, {
+      "type": "Feature",
+      "properties": {
+        "name": "Sacred Heart",
+        "terminus": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [121.08397, 14.75051]
+      }
+    }, {
+      "type": "Feature",
+      "properties": {
+        "name": "Tala",
+        "terminus": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [121.07940, 14.76999]
+      }
+    }, {
+      "type": "Feature",
+      "properties": {
+        "name": "San Jose del Monte",
+        "terminus": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [121.07517, 14.78397]
+      }
     }
+
+
+
   ]
 }
