@@ -133,7 +133,6 @@ legend.onAdd = function (map) {
 };
 
 legend.addTo(map);
-
 // ── CONTROLLERS ───────────────────────────────────────────────────────────────────
  
 const routingControl = L.Routing.control({
