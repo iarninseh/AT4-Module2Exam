@@ -104,6 +104,14 @@ const floodLayer = L.esri.dynamicMapLayer({
     useCors: true
 }).addTo(map);
 
+const faultLayer = L.esri.dynamicMapLayer({
+    url: 'https://ulap-hazards.georisk.gov.ph/arcgis/rest/services/PHIVOLCSPublic/ActiveFault/MapServer',
+    layers: [0],
+    opacity: 1,
+    disableKeepLevels: true,
+    updateInterval: 250,
+    useCors: true
+}).addTo(map);
 
 var legend = L.control({ position: 'bottomleft' });
 
@@ -225,6 +233,14 @@ function toggleFloodLayer() {
     }
 }
 
+function toggleFaultLayer() {
+    if(map.hasLayer(faultLayer)) {
+        map.removeLayer(faultLayer);
+    } else {
+        map.addLayer(faultLayer);
+    }
+}
+
 // ── EVENT LISTENERS ────────────────────────────────────────────────────────────
  
 routingControl.on('routesfound', function(e) {
@@ -309,7 +325,7 @@ fetch('export.geojson')
     })
     .catch(err => console.log("GeoJSON layout configuration payload skipped. Continuing runtime render layer setup."));
  
-/*
+
 fetch('mrt.geojson')
     .then(res => res.json())
     .then(data => {
@@ -323,4 +339,3 @@ fetch('mrt.geojson')
         map.fitBounds(layer.getBounds());
     })
     .catch(err => console.log("GeoJSON layout configuration payload skipped. Continuing runtime render layer setup."));
-*/
