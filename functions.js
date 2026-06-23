@@ -1,10 +1,9 @@
 // ── STATE & CONFIGURATION ─────────────────────────────────────────────────────────────
- 
+
 let markerCount = 0;
-let  routingMarkers = []
+let routingMarkers = []
 const satelliteOfficeCoords = [14.7385201, 121.0602773];
-const markers = [
-    {
+const markers = [{
         id: "marker1",
         type: "house",
         coords: [14.7399741, 121.0694429],
@@ -33,13 +32,13 @@ const markers = [
         id: "evacMarker3",
         type: "evacCenter",
         coords: [14.7386, 121.0590],
-        info: "Evacuation Center Information<br>Address: Feliciano Covered Court, Maligaya Park Subd." 
+        info: "Evacuation Center Information<br>Address: Feliciano Covered Court, Maligaya Park Subd."
     }
 ];
- 
+
 
 // ── ICONS ──────────────────────────────────────────────────────────────────────
- 
+
 const markerTypes = {
     house: {
         name: "House",
@@ -62,7 +61,7 @@ const markerTypes = {
         image: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png'
     },
 
-    office:  {
+    office: {
         name: "Satellite Office",
         icon: L.icon({
             iconUrl: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png',
@@ -89,20 +88,20 @@ const markerTypes = {
         image: 'assets/trainStation.png'
     }
 };
- 
- 
+
+
 // ── MAP & LAYERS ───────────────────────────────────────────────────────────────
- 
+
 const map = L.map('map').setView([14.735, 121.060], 15);
- 
+
 const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors'
 }).addTo(map);
 
 const floodLayer = L.esri.dynamicMapLayer({
-    url:'https://ulap-hazards.georisk.gov.ph/arcgis/rest/services/MGBPublic/Flood/MapServer',
-    layers:[0],
-    opacity:0.6,
+    url: 'https://ulap-hazards.georisk.gov.ph/arcgis/rest/services/MGBPublic/Flood/MapServer',
+    layers: [0],
+    opacity: 0.6,
     disableKeepLevels: true,
     updateInterval: 250,
     useCors: true
@@ -117,13 +116,15 @@ const faultLayer = L.esri.dynamicMapLayer({
     useCors: true
 }).addTo(map);
 
-var legend = L.control({ position: 'bottomleft' });
+var legend = L.control({
+    position: 'bottomleft'
+});
 
 legend.onAdd = function (map) {
     var div = L.DomUtil.create('div', 'info legend');
 
     var html = '<strong>Legend</strong>';
-    
+
     for (var key in markerTypes) {
         html += `<img style="height:16px; width:16px; margin-right: 4px; " src="${markerTypes[key].image}"></img>` + markerTypes[key].name + '<br>';
     }
@@ -131,32 +132,42 @@ legend.onAdd = function (map) {
     div.innerHTML = html;
     return div;
 };
-
 legend.addTo(map);
+
+map.on('click', function () {
+    map.closePopup();
+});
+
 // ── CONTROLLERS ───────────────────────────────────────────────────────────────────
- 
+
 const routingControl = L.Routing.control({
     waypoints: [],
-    createMarker: function() { return null; },
+    createMarker: function () {
+        return null;
+    },
     show: true,
     lineOptions: {
-        styles: [{ color: '#007bff', weight: 5, opacity: 0.7 }]
+        styles: [{
+            color: '#007bff',
+            weight: 5,
+            opacity: 0.7
+        }]
     }
 }).addTo(map);
- 
+
 document.querySelector('.leaflet-routing-container').style.display = 'none';
- 
+
 const geocoderControl = L.Control.geocoder({
     defaultMarkGeocode: false,
     placeholder: "Search streets or buildings...",
     collapsed: false
 }).addTo(map);
- 
- 
+
+
 // ── FUNCTIONS ──────────────────────────────────────────────────────────────────
- 
+
 function addRoutingMarker(coords) {
-    
+
     if ((!routingMarkers.includes(coords)) && routingMarkers.length < 2) routingMarkers.push(coords);
 
     if (routingMarkers.length == 2) {
@@ -166,21 +177,21 @@ function addRoutingMarker(coords) {
         ]);
     }
 }
- 
+
 function endRouting() {
     document.querySelector('.leaflet-routing-container').style.display = 'none';
     routingMarkers = [];
     routingControl.setWaypoints([]);
     document.getElementById('end-button').style.display = 'none';
-    document.getElementById('routing-info').style.display ='none';
+    document.getElementById('routing-info').style.display = 'none';
 }
- 
+
 function saveTaskState(checkbox) {
     localStorage.setItem(checkbox.id, checkbox.checked);
 }
- 
+
 function setupTaskRestore(marker, taskIds) {
-    marker.on('popupopen', function() {
+    marker.on('popupopen', function () {
         taskIds.forEach(id => {
             const checkbox = document.getElementById(id);
             if (checkbox) {
@@ -189,9 +200,11 @@ function setupTaskRestore(marker, taskIds) {
         });
     });
 }
- 
+
 function addMarker(type, coords, info, id) {
-    marker = L.marker(coords, { icon: markerTypes[type].icon }).addTo(map);
+    marker = L.marker(coords, {
+        icon: markerTypes[type].icon
+    }).addTo(map);
 
     switch (type) {
         case "house":
@@ -199,7 +212,7 @@ function addMarker(type, coords, info, id) {
                 `${id}-resident-count`,
                 `${id}-safety-notice`
             ]
-        
+
             marker.bindPopup(`
                 <div style="font-family: Arial, sans-serif; padding: 5px; min-width: 200px;">
                     <h4 style="margin: 0 0 8px 0;">Inspection Tasks</h4>
@@ -210,9 +223,9 @@ function addMarker(type, coords, info, id) {
                         <input type="checkbox" id="${taskIDs[1]}" onchange="saveTaskState(this)"> Deliver safety notice
                     </label>
                 </div>`);
-        
+
             setupTaskRestore(marker, taskIDs);
-        
+
             break;
 
         case "evacCenter":
@@ -221,15 +234,23 @@ function addMarker(type, coords, info, id) {
 
     marker.bindTooltip(info);
 
-    marker.on('click', function() {
+    marker.on('click', function () {
         addRoutingMarker(coords);
     });
-    
+    marker.on('mouseover', function () {
+        if (!this.isPopupOpen()) {
+            this.openPopup();
+        }
+    });
+
+    marker.on('click', function (e) {
+        L.DomEvent.stopPropagation(e); // don't let click reach the map
+    });
     return marker;
 }
 
 function toggleFloodLayer() {
-    if(map.hasLayer(floodLayer)) {
+    if (map.hasLayer(floodLayer)) {
         map.removeLayer(floodLayer);
     } else {
         map.addLayer(floodLayer);
@@ -237,7 +258,7 @@ function toggleFloodLayer() {
 }
 
 function toggleFaultLayer() {
-    if(map.hasLayer(faultLayer)) {
+    if (map.hasLayer(faultLayer)) {
         map.removeLayer(faultLayer);
     } else {
         map.addLayer(faultLayer);
@@ -245,15 +266,15 @@ function toggleFaultLayer() {
 }
 
 // ── EVENT LISTENERS ────────────────────────────────────────────────────────────
- 
-routingControl.on('routesfound', function(e) {
+
+routingControl.on('routesfound', function (e) {
     const summary = e.routes[0].summary;
     const distanceKm = (summary.totalDistance / 1000).toFixed(2);
     const timeMinutes = Math.round(summary.totalTime / 60);
- 
+
     document.querySelector('.leaflet-routing-container').style.display = 'block';
     document.getElementById('end-button').style.display = 'inline';
- 
+
     const infoPanel = document.getElementById('routing-info');
     const metricsDiv = document.getElementById('route-metrics');
     infoPanel.style.display = 'block';
@@ -262,29 +283,29 @@ routingControl.on('routesfound', function(e) {
         <b>Est. Travel Time:</b> ${timeMinutes} mins
     `;
 });
- 
-geocoderControl.on('markgeocode', function(e) {
+
+geocoderControl.on('markgeocode', function (e) {
     const geocodeResult = e.geocode;
- 
+
     if (geocoderControl._customGeocodeMarker) {
         map.removeLayer(geocoderControl._customGeocodeMarker);
     }
- 
+
     geocoderControl._customGeocodeMarker = L.marker(geocodeResult.center)
         .addTo(map)
         .bindPopup(`<b>Searched Location:</b><br>${geocodeResult.name}`)
         .openPopup();
- 
+
     map.setView(geocodeResult.center, 16);
     routingMarkers = [];
-    
+
     addRoutingMarker(geocodeResult.center);
     addRoutingMarker(satelliteOfficeCoords)
 });
- 
+
 const searchInput = document.querySelector('.leaflet-control-geocoder-form input');
 if (searchInput) {
-    searchInput.addEventListener('input', function() {
+    searchInput.addEventListener('input', function () {
         if (this.value.trim() === "") {
             if (geocoderControl._customGeocodeMarker) {
                 map.removeLayer(geocoderControl._customGeocodeMarker);
@@ -295,25 +316,34 @@ if (searchInput) {
         }
     });
 }
- 
- 
+
+
 // ── MARKERS ────────────────────────────────────────────────────────────────────
- 
-const satelliteOffice = L.marker(satelliteOfficeCoords, { icon: markerTypes.office.icon })
+
+const satelliteOffice = L.marker(satelliteOfficeCoords, {
+        icon: markerTypes.office.icon
+    })
     .addTo(map)
-    .bindPopup("<b>Barangay Satellite Office</b><br>Sampaguita St. (Across Station 16, at the back of Fairview Terraces)");
- 
-satelliteOffice.on('click', function() {
-        addRoutingMarker(satelliteOfficeCoords);
-    });
+    .bindTooltip("<b>Barangay Satellite Office</b><br>Sampaguita St. (Across Station 16, at the back of Fairview Terraces)");
+
+satelliteOffice.on('click', function () {
+    addRoutingMarker(satelliteOfficeCoords);
+});
+satelliteOffice.on('mouseover', function () {
+    this.openPopup();
+});
+
+satelliteOffice.on('mouseout', function () {
+    this.closePopup();
+});
 
 for (let i = 0; i < markers.length; i++) {
     addMarker(markers[i].type, markers[i].coords, markers[i].info, markers[i].id);
 }
- 
- 
+
+
 // ── DATA LAYERS ────────────────────────────────────────────────────────────────
- 
+
 fetch('export.geojson')
     .then(res => res.json())
     .then(data => {
@@ -327,7 +357,7 @@ fetch('export.geojson')
         map.fitBounds(layer.getBounds());
     })
     .catch(err => console.log("GeoJSON layout configuration payload skipped. Continuing runtime render layer setup."));
- 
+
 
 fetch('mrt.geojson')
     .then(res => res.json())
@@ -338,16 +368,16 @@ fetch('mrt.geojson')
                 weight: 3,
                 fillOpacity: 0
             },
-        pointToLayer: function (feature, latlng) {
-            return L.marker(latlng, {
-                icon: L.icon({
-                    iconUrl: 'assets/trainStation.png',
-                    iconAnchor: [12, 12],
-                    popupAnchor: [0, -12],
-                    iconSize: [24, 24]
+            pointToLayer: function (feature, latlng) {
+                return L.marker(latlng, {
+                    icon: L.icon({
+                        iconUrl: 'assets/trainStation.png',
+                        iconAnchor: [12, 12],
+                        popupAnchor: [0, -12],
+                        iconSize: [24, 24]
+                    })
                 })
-            })
-        }
+            }
         }).addTo(map);
         map.fitBounds(layer.getBounds());
     })
